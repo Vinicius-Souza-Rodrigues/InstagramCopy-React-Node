@@ -1,23 +1,38 @@
-const User = require("../models/User")
-const jwt = require("jsonwebtoken")
-const jwtSecret = process.env.JWT_SECRET
+const jwt = require("jsonwebtoken");
+const jwtSecret = process.env.JWT_SECRET;
+
+const User = require("../models/User");
 
 const authGuard = async (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
 
-    const autHeader = req.headers["authorization"]
-    const token = authHeader && authHeader.split(" ")[1];
+  // Verifica se existe token
+  if (!token) {
+    return res.status(401).json({ errors: ["Acesso negado"] });
+  }
 
-    // check if header has a token
-    if (!token) return res.status(401).json({errors: ["Acesso negado"]})
-        try {
-            const verified = jwt.verify(token, jwtSecret)
+  try {
+    // Verifica e decodifica o token
+    const verified = jwt.verify(token, jwtSecret);
 
-            req.user = await User.findById(verified.id).select("-password")
+    // Busca usuário no PostgreSQL pelo ID
+    const user = await User.findById(verified.id);
 
-            next();
-        } catch (error) {
-            res.status(401).json({errors: ["Token invalido"]})
-        }
-}
+    if (!user) {
+      return res.status(404).json({ errors: ["Usuário não encontrado"] });
+    }
 
-module.exports = authGuard
+    // Remove a senha antes de continuar
+    delete user.password;
+
+    req.user = user;
+
+    next();
+  } catch (error) {
+    console.error("Erro no authGuard:", error);
+    res.status(401).json({ errors: ["Token inválido"] });
+  }
+};
+
+module.exports = authGuard;

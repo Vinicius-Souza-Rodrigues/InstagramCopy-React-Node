@@ -1,69 +1,11 @@
-/*
-const User = require("../models/User")
-
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
-
-const jwtSecret = process.env.JWT_SECRET;
-
-// Generate user token
-const generateToken = (id) => {
-    return jwt.sign({id}, jwtSecret, {
-        expiresIn: "7d",
-    });
-};
-
-// Register user and sign in
-const register = async(req, res) => {
-
-    const {name, email, password} = req.body
-
-    //check if user exists
-    const user = await User.findOne({email})
-
-    if (user) {
-        res.status(422).json({errors: ["Por f avor, utilize outro email!"]})
-        return
-    }
-
-    // Generate password hash
-    const salt = await bcrypt.genSalt()
-    const passwordHash = await bcrypt.hash(password, salt)
-
-    //create user
-    const newUser = await User.create({
-        name,
-        email,
-        password: passwordHash
-    })
-
-    //iF user was created sucessfuly = token
-    if (!newUser) {
-        res.status(422).json({errors: ["houve um erro!"]})
-
-        res.status(201).json({
-            _id: newUser._id,
-            token: generateToken(newUser._id),
-        })
-    }
-    
-};
-
-module.exports = {
-    register,
-}
-*/
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const jwtSecret = process.env.JWT_SECRET;
 
-// Importa funções do model
-const {
-  buscarUsuarioPorEmail,
-  criarUsuario
-} = require("../models/User");
+const User = require("../models/User");
+const db = require("../config/db");
 
-// Gera token
+// Gera token JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, jwtSecret, {
     expiresIn: "7d",
@@ -75,26 +17,22 @@ const register = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    // Verifica se já existe usuário
-    const existingUser = await buscarUsuarioPorEmail(email);
+    const existingUser = await User.buscarUsuarioPorEmail(email);
     if (existingUser) {
       return res.status(422).json({ errors: ["Por favor, utilize outro email!"] });
     }
 
-    // Criptografa a senha
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
 
-    // Cria usuário
-    const newUser = await criarUsuario({
+    const newUser = await User.criarUsuario({
       name,
       email,
       password: passwordHash,
-      profileImage: "", // valor padrão
-      bio: ""
+      profileImage: "",
+      bio: "",
     });
 
-    // Se tudo ok, retorna token
     return res.status(201).json({
       id: newUser.id,
       token: generateToken(newUser.id),
@@ -111,20 +49,17 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await buscarUsuarioPorEmail(email);
+    const user = await User.buscarUsuarioPorEmail(email);
 
-    // Checar se usuário existe
     if (!user) {
       return res.status(404).json({ errors: ["Usuário não encontrado!"] });
     }
 
-    // Verifica se a senha está correta
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       return res.status(422).json({ errors: ["Senha inválida!"] });
     }
 
-    // Retorna dados e token
     return res.status(200).json({
       id: user.id,
       name: user.name,
@@ -139,8 +74,102 @@ const login = async (req, res) => {
   }
 };
 
+// Retorna o usuário logado
+const getCurrentUser = async (req, res) => {
+  const user = req.user;
+  res.status(200).json(user);
+};
+
+// Atualizar usuário
+const update = async (req, res) => {
+  const { name, password, bio } = req.body;
+  let profileImage = null;
+
+  if (req.file) {
+    profileImage = req.file.filename;
+  }
+
+  const reqUser = req.user;
+
+  try {
+    const user = await User.findById(reqUser.id);
+
+    if (!user) {
+      return res.status(404).json({ errors: ["Usuário não encontrado!"] });
+    }
+
+    const updatedFields = {
+      name: name || user.name,
+      bio: bio || user.bio,
+      profileImage: profileImage || user.profile_image,
+    };
+
+    if (password) {
+      const salt = await bcrypt.genSalt();
+      updatedFields.password = await bcrypt.hash(password, salt);
+    }
+
+    const fields = [];
+    const values = [];
+    let index = 1;
+
+    for (const [key, value] of Object.entries(updatedFields)) {
+      const column = key === "profileImage" ? "profile_image" : key;
+      fields.push(`${column} = $${index}`);
+      values.push(value);
+      index++;
+    }
+
+    values.push(reqUser.id);
+
+    const query = `
+      UPDATE users
+      SET ${fields.join(", ")}
+      WHERE id = $${index}
+      RETURNING id, name, email, bio, profile_image
+    `;
+
+    const result = await db.query(query, values);
+    const updatedUser = result.rows[0];
+
+    res.status(200).json({
+      id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      bio: updatedUser.bio,
+      profileImage: updatedUser.profile_image,
+    });
+
+  } catch (error) {
+    console.error("Erro ao atualizar usuário:", error);
+    return res.status(500).json({ errors: ["Erro no servidor."] });
+  }
+};
+
+// Buscar usuário por ID
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ errors: ["Usuário não encontrado"] });
+    }
+
+    delete user.password;
+
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error("Erro ao buscar usuário por ID:", error);
+    return res.status(500).json({ errors: ["Erro no servidor"] });
+  }
+};
+
 module.exports = {
   register,
   login,
+  getCurrentUser,
+  update,
+  getUserById,
 };
-
