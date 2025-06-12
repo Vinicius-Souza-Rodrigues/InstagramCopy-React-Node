@@ -1,0 +1,11 @@
+import './Footer.module.css'
+
+const Footer = () => {
+    return (
+        <footer id='footer'>
+            <p>InstagramCopy &copy; 2025</p>
+        </footer>
+    )
+}
+
+export default Footer
