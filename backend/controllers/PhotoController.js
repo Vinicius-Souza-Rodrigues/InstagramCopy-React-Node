@@ -1,7 +1,6 @@
 const Photo = require("../models/Photo");
 const User = require("../models/User");
 
-// Inserir uma foto com usuário relacionado
 const insertPhoto = async (req, res) => {
   const { title } = req.body;
   const image = req.file ? req.file.filename : null;
@@ -29,7 +28,6 @@ const insertPhoto = async (req, res) => {
   }
 };
 
-// Remover uma foto
 const deletePhoto = async (req, res) => {
   const { id } = req.params;
   const reqUser = req.user;
@@ -56,10 +54,9 @@ const deletePhoto = async (req, res) => {
   }
 };
 
-// Get all photos
 const getAllPhotos = async (req, res) => {
   try {
-    const photos = await Photo.findAll(); // Ja ordena por created_at DESC no model
+    const photos = await Photo.findAll();
     return res.status(200).json(photos);
   } catch (error) {
     console.error("Erro ao buscar todas as fotos:", error);
@@ -67,7 +64,6 @@ const getAllPhotos = async (req, res) => {
   }
 };
 
-// Get user photos
 const getUserPhotos = async (req, res) => {
   try {
     const { id } = req.params;

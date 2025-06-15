@@ -1,9 +1,9 @@
-import './Auth.module.css'
+import './Auth.css'
 
 const Login = () => {
     return (
         <div>
-sa
+            sa
         </div>
     )
 }

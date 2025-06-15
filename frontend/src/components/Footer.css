@@ -1,0 +1,21 @@
+body.dark #footer {
+    background-color: rgb(29, 29, 29);
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #363636;
+    margin-top: 3em;
+}
+
+/* lights */
+
+body.light #footer {
+    background-color: #dad6d6;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #444343;
+    margin-top: 3em;
+}

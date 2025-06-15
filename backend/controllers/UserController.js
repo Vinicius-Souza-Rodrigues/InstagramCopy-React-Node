@@ -5,14 +5,12 @@ const jwtSecret = process.env.JWT_SECRET;
 const User = require("../models/User");
 const db = require("../config/db");
 
-// Gera token JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, jwtSecret, {
     expiresIn: "7d",
   });
 };
 
-// Registro
 const register = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -44,7 +42,6 @@ const register = async (req, res) => {
   }
 };
 
-// Login
 const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -74,13 +71,11 @@ const login = async (req, res) => {
   }
 };
 
-// Retorna o usuário logado
 const getCurrentUser = async (req, res) => {
   const user = req.user;
   res.status(200).json(user);
 };
 
-// Atualizar usuário
 const update = async (req, res) => {
   const { name, password, bio } = req.body;
   let profileImage = null;
@@ -146,7 +141,6 @@ const update = async (req, res) => {
   }
 };
 
-// Buscar usuário por ID
 const getUserById = async (req, res) => {
   const { id } = req.params;
 

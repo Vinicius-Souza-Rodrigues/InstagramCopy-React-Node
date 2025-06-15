@@ -1,0 +1,86 @@
+/* Modo dark */
+body.dark #login,
+body.dark #register {
+  border: 1px solid #363636;
+  background-color: #000;
+  border-radius: 10px;
+  padding: 1.5em 2em;
+  max-width: 24%;
+  margin: 2em auto;
+  margin-left: 26.5em;
+}
+
+body.dark #login h2,
+body.dark #register h2 {
+  text-align: center;
+  font-size: 2.1em;
+  margin-top: 0;
+}
+
+body.dark .subtitle {
+  font-weight: bold;
+  color: #999;
+  margin-bottom: 1.5em;
+}
+
+body.dark #login form,
+body.dark #register form {
+  padding-bottom: 1.5em;
+  margin-bottom: 1.5em;
+  border-bottom: 1px solid #363636;
+}
+
+body.dark #login p,
+body.dark #register p {
+  text-align: center;
+}
+
+body.dark #login p a,
+body.dark #register p a {
+  font-weight: bold;
+  color: #0094f6;
+}
+
+
+/* Modo Light */
+body.light #login,
+body.light #register {
+  border: 1px solid #ccc;
+  background-color: #dad6d6;;
+  border-radius: 10px;
+  padding: 1.5em 2em;
+  max-width: 24%;
+  margin: 2em auto;
+  margin-left: 26.5em;
+}
+
+body.light #login h2,
+body.light #register h2 {
+  text-align: center;
+  font-size: 2.1em;
+  margin-top: 0;
+}
+
+body.light .subtitle {
+  font-weight: bold;
+  color: #444;
+  margin-bottom: 1.5em;
+}
+
+body.light #login form,
+body.light #register form {
+  padding-bottom: 1.5em;
+  margin-bottom: 1.5em;
+  border-bottom: 1px solid #5e5c5c;
+}
+
+body.light #login p,
+body.light #register p {
+  text-align: center;
+}
+
+body.light #login p a,
+body.light #register p a {
+  font-weight: bold;
+  color: #0094f6;
+}

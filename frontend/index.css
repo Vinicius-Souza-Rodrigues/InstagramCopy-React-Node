@@ -1,4 +1,185 @@
-* {
-    font-family: "Lato", sans-serif;
-    background-color: green;
+body.dark {
+  font-family: "Lato", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #121212;
+  color: #fafafa;
 }
+
+body.dark a {
+  color: #fafafa;
+  text-decoration: none;
+}
+
+body.dark .active {
+  font-weight: bold;
+  border-bottom: 1px solid white;
+}
+
+body.dark ul {
+  list-style: none;
+}
+
+body.dark form {
+  display: flex;
+  flex-direction: column;
+}
+
+body.dark label {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+body.dark label span {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  color: #aaa;
+  font-size: 0.7em;
+}
+
+body.dark input {
+  background-color: #3b3b3b;
+  color: #aaa;
+  border: 1px solid #555;
+  border-radius: 2px;
+  padding: 10px 8px;
+  outline: none;
+  margin-bottom: 0.6em;
+}
+
+body.dark input::placeholder {
+  color: #aaa;
+}
+
+body.dark .btn,
+body.dark button,
+body.dark input[type="submit"] {
+  background-color: #0094f6;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 8px;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0.8;
+  font-size: 1em;
+}
+
+body.dark input[type="submit"] {
+  margin-top: 1em;
+}
+
+body.dark input:disabled {
+  cursor: not-allowed;
+  background-color: #000;
+}
+
+body.dark button:hover,
+body.dark input[type="submit"]:hover {
+  opacity: 1;
+}
+
+body.dark .cancel-btn {
+  background-color: #ccc;
+}
+
+body.dark .hide {
+  display: none;
+}
+
+/* light */
+
+body.light {
+  font-family: "Lato", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #fafafa;
+  color: #121212;
+}
+
+body.light a {
+  color: #121212;
+  text-decoration: none;
+}
+
+body.light .active {
+  font-weight: bold;
+  border-bottom: 1px solid black;
+}
+
+body.light ul {
+  list-style: none;
+}
+
+body.light form {
+  display: flex;
+  flex-direction: column;
+}
+
+body.light label {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+body.light label span {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  color: #aaa;
+  font-size: 0.7em;
+}
+
+body.light input {
+  background-color: #fff;
+  color: #aaa;
+  border: 1px solid #555;
+  border-radius: 2px;
+  padding: 10px 8px;
+  outline: none;
+  margin-bottom: 0.6em;
+}
+
+body.light input::placeholder {
+  color: #aaa;
+}
+
+body.light .btn,
+body.light button,
+body.light input[type="submit"] {
+  background-color: #0094f6;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 8px;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0.8;
+  font-size: 1em;
+}
+
+body.light input[type="submit"] {
+  margin-top: 1em;
+}
+
+body.light input:disabled {
+  cursor: not-allowed;
+  background-color: white;
+}
+
+body.light button:hover,
+body.light input[type="submit"]:hover {
+  opacity: 1;
+}
+
+body.light .cancel-btn {
+  background-color: #ccc;
+}
+
+body.light .hide {
+  display: none;
+}
+
+
