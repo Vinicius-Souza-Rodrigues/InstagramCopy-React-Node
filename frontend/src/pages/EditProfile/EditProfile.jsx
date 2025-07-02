@@ -24,12 +24,10 @@ const Profile = () => {
   const [bio, setBio] = useState("");
   const [previewImage, setPreviewImage] = useState("");
 
-  // Load user data
   useEffect(() => {
     dispatch(profile());
   }, [dispatch]);
 
-  // fill user form
   useEffect(() => {
     if (user) {
       setName(user.name);
@@ -41,7 +39,6 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Gather user data from states
     const userData = {
       name,
     };
@@ -58,7 +55,6 @@ const Profile = () => {
       userData.password = password;
     }
 
-    // build form data
     const formData = new FormData();
 
     const userFormData = Object.keys(userData).forEach((key) =>
@@ -75,12 +71,10 @@ const Profile = () => {
   };
 
   const handleFile = (e) => {
-    // image preview
     const image = e.target.files[0];
 
     setPreviewImage(image);
 
-    // change image state
     setProfileImage(image);
   };
 
